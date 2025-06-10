@@ -39,7 +39,24 @@ func createMigrations(db string) error {
 		return fmt.Errorf("can't make directory. \n%v", err)
 	}
 
-	if err := ioutil.WriteFile("migrations/2022_04_01_000000_create_users_table.go", []byte(fmt.Sprintf(templates.UserMigrationTemplate, db)), 0666); err != nil {
+	//users table
+	if err := ioutil.WriteFile("migrations/2025_06_11_000000_create_users_table.go", []byte(fmt.Sprintf(templates.UserMigrationTemplate, db)), 0666); err != nil {
+		return fmt.Errorf("can't create migration file. \n%v", err)
+	}
+	//cache table
+	if err := ioutil.WriteFile("migrations/2025_06_11_000001_create_cache_table.go", []byte(fmt.Sprintf(templates.CacheMigrationTemplate, db)), 0666); err != nil {
+		return fmt.Errorf("can't create migration file. \n%v", err)
+	}
+	//jobs table
+	if err := ioutil.WriteFile("migrations/2025_06_11_000002_create_jobs_table.go", []byte(fmt.Sprintf(templates.JobsMigrationTemplate, db)), 0666); err != nil {
+		return fmt.Errorf("can't create migration file. \n%v", err)
+	}
+	//personal access tokens table
+	if err := ioutil.WriteFile("migrations/2025_06_11_000003_create_personal_access_tokens_table.go", []byte(fmt.Sprintf(templates.PersonalAccessTokensMigrationTemplate, db)), 0666); err != nil {
+		return fmt.Errorf("can't create migration file. \n%v", err)
+	}
+	//permissions table
+	if err := ioutil.WriteFile("migrations/2025_06_11_000004_create_permissions_table.go", []byte(fmt.Sprintf(templates.PermissionsMigrationTemplate, db)), 0666); err != nil {
 		return fmt.Errorf("can't create migration file. \n%v", err)
 	}
 
