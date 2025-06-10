@@ -3,9 +3,9 @@ package templates
 var MigrationTemplate = `package migrations
 
 import (
-	"go-migrate/config"
-	"go-migrate/pkg/interfaces"
-	"go-migrate/pkg/lib/%[1]s"
+	"github.com/Palguna1121/go-migrate/config"
+	"github.com/Palguna1121/go-migrate/pkg/interfaces"
+	"github.com/Palguna1121/go-migrate/pkg/lib/%[1]s"
 )
 
 func init() {

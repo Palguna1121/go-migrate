@@ -3,9 +3,9 @@ package mysql
 import (
 	"fmt"
 
-	"go-migrate/pkg/interfaces"
+	"github.com/Palguna1121/go-migrate/pkg/interfaces"
 
-	sk "go-migrate/go_solve_kit"
+	sk "github.com/Palguna1121/go-migrate/go_solve_kit"
 )
 
 type Blueprint struct {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"go-migrate/pkg/interfaces"
-	"go-migrate/pkg/model"
+	"github.com/Palguna1121/go-migrate/pkg/interfaces"
+	"github.com/Palguna1121/go-migrate/pkg/model"
 )
 
 type migrator struct {

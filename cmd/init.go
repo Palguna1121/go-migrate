@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/exec"
 
-	"go-migrate/templates"
+	"github.com/Palguna1121/go-migrate/templates"
 	"github.com/spf13/cobra"
 	"golang.org/x/mod/modfile"
 )
@@ -77,7 +77,7 @@ func handleInit(db string) error {
 
 var initCmd = &cobra.Command{
 	Use:   "init <db>",
-	Short: "Init go-migrate-cmd context in this project",
+	Short: "Init github.com/Palguna1121/go-migrate-cmd context in this project",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		db := args[0]

@@ -1,6 +1,6 @@
 package config
 
-import "go-migrate/pkg/interfaces"
+import "github.com/Palguna1121/go-migrate/pkg/interfaces"
 
 type DatabaseConfig struct {
 	Host     string

@@ -6,7 +6,7 @@ import (
 	"os"
 	"os/exec"
 
-	"go-migrate/cmd"
+	"github.com/Palguna1121/go-migrate/cmd"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 	}
 
 	if _, err := os.Stat("cmd/migrate/migrate.go"); errors.Is(err, os.ErrNotExist) {
-		fmt.Println("Error: please run 'go-migrate init'.")
+		fmt.Println("Error: please run 'github.com/Palguna1121/go-migrate init'.")
 		return
 	}
 

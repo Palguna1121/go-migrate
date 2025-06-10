@@ -1,6 +1,6 @@
 package interfaces
 
-import "go-migrate/pkg/model"
+import "github.com/Palguna1121/go-migrate/pkg/model"
 
 type Migrator interface {
 	CheckTable() (bool, error)

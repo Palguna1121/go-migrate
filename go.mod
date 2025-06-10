@@ -1,4 +1,4 @@
-module go-migrate
+module github.com/Palguna1121/go-migrate
 
 go 1.24.0
 

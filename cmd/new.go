@@ -7,8 +7,8 @@ import (
 	"strings"
 	"time"
 
-	"go-migrate/config"
-	"go-migrate/templates"
+	"github.com/Palguna1121/go-migrate/config"
+	"github.com/Palguna1121/go-migrate/templates"
 	"github.com/spf13/cobra"
 )
 

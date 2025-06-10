@@ -3,7 +3,7 @@ package mysql
 import (
 	"fmt"
 
-	sk "go-migrate/go_solve_kit"
+	sk "github.com/Palguna1121/go-migrate/go_solve_kit"
 )
 
 type meta struct {

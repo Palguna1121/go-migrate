@@ -3,8 +3,8 @@ package mysql
 import (
 	"fmt"
 
-	"go-migrate/pkg/interfaces"
-	mysql_interfaces "go-migrate/pkg/lib/mysql/interfaces"
+	"github.com/Palguna1121/go-migrate/pkg/interfaces"
+	mysql_interfaces "github.com/Palguna1121/go-migrate/pkg/lib/mysql/interfaces"
 )
 
 type schema struct{}

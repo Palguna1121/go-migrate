@@ -8,7 +8,7 @@ import (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "go-migrate",
+	Use:   "github.com/Palguna1121/go-migrate",
 	Short: "The command makes your database migrations as easy as Laravel.",
 }
 

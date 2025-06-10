@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"sort"
 
-	"go-migrate/pkg/interfaces"
-	mysql_interfaces "go-migrate/pkg/lib/mysql/interfaces"
-	"go-migrate/pkg/model"
+	"github.com/Palguna1121/go-migrate/pkg/interfaces"
+	mysql_interfaces "github.com/Palguna1121/go-migrate/pkg/lib/mysql/interfaces"
+	"github.com/Palguna1121/go-migrate/pkg/model"
 
-	sk "go-migrate/go_solve_kit"
+	sk "github.com/Palguna1121/go-migrate/go_solve_kit"
 )
 
 type seeder struct {

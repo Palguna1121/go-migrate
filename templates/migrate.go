@@ -3,9 +3,9 @@ package templates
 var MigrateTemplate = `package main
 
 import (
-	"go-migrate/cmd"
-	"go-migrate/config"
-	"go-migrate/pkg/lib/%[1]s"
+	"github.com/Palguna1121/go-migrate/cmd"
+	"github.com/Palguna1121/go-migrate/config"
+	"github.com/Palguna1121/go-migrate/pkg/lib/%[1]s"
 	_ "%[2]s/migrations"
 )
 
