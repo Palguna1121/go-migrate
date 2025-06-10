@@ -9,44 +9,30 @@ import (
 )
 
 func init() {
-	config.Migrations = append(config.Migrations, CreateCacheTable())
+	config.Migrations = append(config.Migrations, CreatePersonalAccessTokensTable())
 }
 
-type CacheTable struct{}
+type PersonalAccessTokensTable struct{}
 
-func CreateCacheTable() interfaces.Migration {
-	return &CacheTable{}
+func CreatePersonalAccessTokensTable() interfaces.Migration {
+	return &PersonalAccessTokensTable{}
 }
 
-func (t *CacheTable) Up() error {
-	if err := mysql.Schema.Create("cache", func(table interfaces.Blueprint) {
-		table.String("key", 255).Primary()
-		table.Text("value")
-		table.Integer("expiration", 11).Nullable()
-	}); err != nil {
-		return err
-	}
-
-	if err := mysql.Schema.Create("cache_locks", func(table interfaces.Blueprint) {
-		table.String("key", 255).Primary()
-		table.String("owner", 255).Nullable()
-		table.Integer("expiration", 11).Nullable()
-	}); err != nil {
-		return err
-	}
-
-	return nil
+func (t *PersonalAccessTokensTable) Up() error {
+	return mysql.Schema.Create("personal_access_tokens", func(table interfaces.Blueprint) {
+		table.Id("id", 11)
+		table.String("tokenable_type", 255)
+		table.Integer("tokenable_id", 11).Index()
+		table.String("name", 255)
+		table.String("token", 64).Unique()
+		table.String("abilities", 255).Nullable()
+		table.DateTime("last_used_at").Nullable()
+		table.DateTime("expires_at").Nullable()
+		table.Timestamps()
+	})
 }
 
-func (t *CacheTable) Down() error {
-	if err := mysql.Schema.DropIfExists("cache"); err != nil {
-		return err
-	}
-
-	if err := mysql.Schema.DropIfExists("cache_locks"); err != nil {
-		return err
-	}
-
-	return nil
+func (t *PersonalAccessTokensTable) Down() error {
+	return mysql.Schema.DropIfExists("personal_access_tokens")
 }
 `
