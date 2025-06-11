@@ -7,7 +7,7 @@ import (
 	"github.com/Palguna1121/go-migrate/config"
 	"github.com/Palguna1121/go-migrate/pkg/lib/%[1]s"
 	_ "%[2]s/migrations"
-	localconfig "your_project/config" // Replace with your actual config package
+	localconfig "your_project/config"
 	"strconv"
 )
 
@@ -20,7 +20,7 @@ func init() {
 		Host:     localconfig.ENV.DB_HOST,
 		Port:     port,
 		Username: localconfig.ENV.DB_USER,
-		Password: localconfig.ENV.DB_PASSWORD,
+		Password: localconfig.ENV.BD_PASSWORD,
 		Dbname:   localconfig.ENV.DB_NAME,
 	}
 
