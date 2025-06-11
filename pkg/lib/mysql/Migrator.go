@@ -8,7 +8,8 @@ import (
 	"github.com/Palguna1121/go-migrate/pkg/model"
 )
 
-type migrator struct{}
+type migrator struct {
+}
 
 func InitMigrator() interfaces.Migrator {
 	return &migrator{}
@@ -21,14 +22,13 @@ func (m *migrator) CheckTable() (bool, error) {
 	}
 	defer driver.Close()
 
-	var count int64
-	sql := "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = 'migrations'"
-	err = driver.QueryRow(&count, sql)
+	sql := "SHOW TABLES LIKE 'migrations'"
+	rows, err := driver.Query(sql)
 	if err != nil {
 		return false, err
 	}
 
-	return count > 0, nil
+	return rows.Next(), nil
 }
 
 func (m *migrator) CreateTable() error {
@@ -39,11 +39,13 @@ func (m *migrator) CreateTable() error {
 	defer driver.Close()
 
 	sqls := []string{
-		"CREATE TABLE `migrations` (`id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, `migration` varchar(255) NOT NULL, `batch` int(11) NOT NULL, PRIMARY KEY (`id`));",
+		"CREATE TABLE `migrations` (`id` int(10) UNSIGNED NOT NULL, `migration` varchar(255) NOT NULL, `batch` int(11) NOT NULL);",
+		"ALTER TABLE `migrations` ADD PRIMARY KEY (`id`);",
+		"ALTER TABLE `migrations` MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;",
 	}
 
 	for _, sql := range sqls {
-		if err := driver.Execute(sql); err != nil {
+		if _, err := driver.Execute(sql); err != nil {
 			return err
 		}
 	}
@@ -58,8 +60,9 @@ func (m *migrator) DropTableIfExists() error {
 	}
 	defer driver.Close()
 
-	sql := "DROP TABLE IF EXISTS migrations"
-	return driver.Execute(sql)
+	sql := "DROP TABLE IF EXISTS migrations;"
+	_, err = driver.Execute(sql)
+	return err
 }
 
 func (m *migrator) DropAllTable() error {
@@ -69,27 +72,12 @@ func (m *migrator) DropAllTable() error {
 	}
 	defer driver.Close()
 
-	var tables []string
-	sql := "SELECT table_name FROM information_schema.tables WHERE table_schema = DATABASE() AND table_type = 'BASE TABLE'"
-	err = driver.Query(&tables, sql)
-	if err != nil {
-		return err
-	}
+	tables := []string{}
+	sql := "SHOW TABLES"
+	driver.Select(&tables, sql)
 
-	if len(tables) == 0 {
-		return nil
-	}
-
-	err = driver.Execute("SET FOREIGN_KEY_CHECKS = 0")
-	if err != nil {
-		return err
-	}
-
-	sql = fmt.Sprintf("DROP TABLE IF EXISTS %s", strings.Join(tables, ","))
-	err = driver.Execute(sql)
-
-	driver.Execute("SET FOREIGN_KEY_CHECKS = 1")
-
+	sql = fmt.Sprintf("DROP TABLE IF EXISTS %s;", strings.Join(tables, ","))
+	_, err = driver.Execute(sql)
 	return err
 }
 
@@ -100,9 +88,9 @@ func (m *migrator) GetMigrations() ([]model.Migration, error) {
 	}
 	defer driver.Close()
 
-	var migrations []model.Migration
-	sql := "SELECT id, migration, batch FROM `migrations` ORDER BY id"
-	err = driver.Query(&migrations, sql)
+	migrations := []model.Migration{}
+	sql := "SELECT id, migration, batch FROM `migrations`"
+	err = driver.Select(&migrations, sql)
 	return migrations, err
 }
 
@@ -113,8 +101,9 @@ func (m *migrator) WriteRecord(migration string, batch int) error {
 	}
 	defer driver.Close()
 
-	sql := "INSERT INTO `migrations`(`migration`, `batch`) VALUES (?, ?)"
-	return driver.Execute(sql, migration, batch)
+	sql := fmt.Sprintf("INSERT INTO `migrations`(`migration`, `batch`) VALUES ('%s','%d')", migration, batch)
+	_, err = driver.Execute(sql)
+	return err
 }
 
 func (m *migrator) DeleteRecord(id int) error {
@@ -124,6 +113,7 @@ func (m *migrator) DeleteRecord(id int) error {
 	}
 	defer driver.Close()
 
-	sql := "DELETE FROM `migrations` WHERE id = ?"
-	return driver.Execute(sql, id)
+	sql := fmt.Sprintf("DELETE FROM `migrations` WHERE id = %d", id)
+	_, err = driver.Execute(sql)
+	return err
 }

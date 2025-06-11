@@ -1,28 +1,30 @@
 package mysql
 
 import (
+	"database/sql"
 	"fmt"
 
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jmoiron/sqlx"
 
-	"github.com/Palguna1121/response-std/config"
+	"github.com/Palguna1121/go-migrate/config"
 )
 
 type driver struct {
-	db *gorm.DB
+	db *sqlx.DB
 }
 
 func NewDriver() (*driver, error) {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
-		config.ENV.DB_USER,
-		config.ENV.DB_PASSWORD,
-		config.ENV.DB_HOST,
-		config.ENV.DB_PORT,
-		config.ENV.DB_NAME,
+	dsn := fmt.Sprintf(
+		"%s:%s@tcp(%s:%d)/%s",
+		config.Config.Username,
+		config.Config.Password,
+		config.Config.Host,
+		config.Config.Port,
+		config.Config.Dbname,
 	)
 
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := sqlx.Open("mysql", dsn)
 	if err != nil {
 		return nil, fmt.Errorf("connect mysql server failed, err:%v", err)
 	}
@@ -30,31 +32,23 @@ func NewDriver() (*driver, error) {
 	return &driver{db: db}, nil
 }
 
-// Execute - menjalankan raw SQL tanpa mengembalikan rows
-func (d *driver) Execute(sql string, args ...interface{}) error {
-	return d.db.Exec(sql, args...).Error
+func (d *driver) Execute(sql string) (sql.Result, error) {
+	result, err := d.db.Exec(sql)
+	return result, err
 }
 
-// Query - SELECT query yang mengembalikan multiple rows
-func (d *driver) Query(dest interface{}, sql string, args ...interface{}) error {
-	return d.db.Raw(sql, args...).Scan(dest).Error
+func (d *driver) Query(sql string) (*sql.Rows, error) {
+	return d.db.Query(sql)
 }
 
-// QueryRow - SELECT query single row
-func (d *driver) QueryRow(dest interface{}, sql string, args ...interface{}) error {
-	return d.db.Raw(sql, args...).Scan(dest).Error
+func (d *driver) Select(dest interface{}, sql string) error {
+	return d.db.Select(dest, sql)
 }
 
-// Select - alias Query
-func (d *driver) Select(dest interface{}, sql string, args ...interface{}) error {
-	return d.Query(dest, sql, args...)
+func (d *driver) Debug() *sqlx.DB {
+	return d.db
 }
 
-// Close - menutup koneksi database
 func (d *driver) Close() error {
-	sqlDB, err := d.db.DB()
-	if err != nil {
-		return err
-	}
-	return sqlDB.Close()
+	return d.db.Close()
 }

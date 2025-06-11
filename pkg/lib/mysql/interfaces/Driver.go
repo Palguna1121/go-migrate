@@ -1,8 +1,12 @@
 package interfaces
 
+import (
+	"database/sql"
+)
+
 type Driver interface {
-	Execute(sql string, args ...interface{}) error
-	Query(dest interface{}, sql string, args ...interface{}) error
-	Select(dest interface{}, sql string, args ...interface{}) error
+	Execute(sql string) (sql.Result, error)
+	Query(sql string) (*sql.Rows, error)
+	Select(dest interface{}, sql string) error
 	Close() error
 }
