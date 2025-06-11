@@ -34,7 +34,7 @@ func createWithDriver(driver mysql_interfaces.Driver, table string, schemaFunc f
 	schemaFunc(blueprint)
 	sqls := blueprint.GetSqls(table, metaOperations.CREATE)
 	for _, sql := range sqls {
-		if _, err := driver.Execute(sql); err != nil {
+		if err := driver.Execute(sql); err != nil {
 			return err
 		}
 	}
@@ -63,7 +63,7 @@ func tableWithDriver(driver mysql_interfaces.Driver, table string, schemaFunc fu
 
 	sqls := blueprint.GetSqls(table, metaOperations.ALTER)
 	for _, sql := range sqls {
-		if _, err := driver.Execute(sql); err != nil {
+		if err := driver.Execute(sql); err != nil {
 			return err
 		}
 	}
@@ -86,8 +86,8 @@ func (s *Schema_test) DropIfExists(driver mysql_interfaces.Driver, table string)
 
 func dropIfExistsWithDriver(driver mysql_interfaces.Driver, table string) error {
 	defer driver.Close()
-	sql := fmt.Sprintf("DROP TABLE IF EXISTS %s;", table)
-	_, err := driver.Execute(sql)
+	sql := fmt.Sprintf("DROP TABLE IF EXISTS `%s`", table)
+	err := driver.Execute(sql)
 	return err
 }
 
