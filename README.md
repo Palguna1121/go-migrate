@@ -9,7 +9,7 @@
 1. Install [go-migrate](https://github.com/Palguna1121/go-migrate) using `go install` like so:
     
 ```bash
-    go install github.com/Palguna1121/go-migrate
+    go install github.com/Palguna1121/go-migrate@latest
 ```
 
 # Quick start
